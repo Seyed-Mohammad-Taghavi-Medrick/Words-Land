@@ -3,6 +3,7 @@ using UnityEngine;
 
 public static class GameEvents
 {
+    
     public static event Action OnEnableSqaureSelection;
 
     public static void EnableSqaureSelectionMethod()

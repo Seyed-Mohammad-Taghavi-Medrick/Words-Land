@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6994648837731580287}
   - component: {fileID: 5277924071555701326}
   - component: {fileID: -3234704273260270163}
-  - component: {fileID: 2983854438916110923}
+  - component: {fileID: 4672149938714208013}
   m_Layer: 0
   m_Name: A
   m_TagString: Untagged
@@ -98,19 +98,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed27bcbcf15f8244bac71d440f431ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointOfLetter: 1
   letter: A
-  _chance: 100
+  _chance: 8.12
+  lerpSpeed: 7.5
+  isPartOfWord: 0
   pos: {x: 0, y: 0}
---- !u!65 &2983854438916110923
-BoxCollider:
+--- !u!58 &4672149938714208013
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8743358629272718375}
+  m_Enabled: 1
+  m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 0.92, y: 0.9, z: 0.2}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.34

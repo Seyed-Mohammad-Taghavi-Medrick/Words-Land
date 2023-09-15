@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
@@ -12,27 +14,33 @@ public class BlocksMaker : MonoBehaviour
     [SerializeField] int width;
     [SerializeField] int height;
 
-    [SerializeField] private float moveDuration = 0.5f;
+    private int alphabetToUse;
     [SerializeField] private Alphabet[] alphabetsPrefabs;
 
-    private Dictionary<string, DicItem> currentAlphabets = new Dictionary<string, DicItem>();
+    [SerializeField] private Alphabet[,] alphabetsGrid;
 
-    public class DicItem
+    public enum BoardState
     {
-        public Alphabet alphabet;
-        public Vector2 pos;
-
-        public DicItem(Alphabet alphabet, Vector2 pos)
-        {
-            this.alphabet = alphabet;
-            this.pos = pos;
-        }
+        wait,
+        move
     }
+
+    public BoardState currentState = BoardState.move;
 
     // Start is called before the first frame update
     void Start()
     {
+        DecreaseRowCoRutin();
+        alphabetsGrid = new Alphabet[width, height];
         SetupBlocks();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Shuffle();
+        }
     }
 
     // Update is called once per frame
@@ -40,48 +48,144 @@ public class BlocksMaker : MonoBehaviour
     {
         for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < height;)
+            for (int y = 0; y < height; /*y++*/)
             {
                 var chance = Random.Range(0, 100);
-
-                Vector2 pos = new Vector2(x + offset * x, y + offset * y);
-                int alphabetToUse = Random.Range(0, alphabetsPrefabs.Length);
-
+                Vector2 pos = new Vector2(x /*+ offset * x*/, y /*+ offset * y*/);
+                alphabetToUse = Random.Range(0, alphabetsPrefabs.Length);
                 if (chance < alphabetsPrefabs[alphabetToUse].Chance)
                 {
                     Debug.Log(chance);
+                    spawnAlphabet(new Vector2Int(x, y), alphabetsPrefabs[alphabetToUse]);
 
-                    spawnAlphabet(new Vector2(pos.x, pos.y), alphabetsPrefabs[alphabetToUse]);
                     y++;
                 }
             }
         }
     }
 
-    void spawnAlphabet(Vector2 posIndext, Alphabet alphabetToSpawn)
+    private void spawnAlphabet(Vector2Int posIndex, Alphabet alphabetToSpawn)
     {
-        Alphabet alphabet = Instantiate(alphabetToSpawn, new Vector2(posIndext.x, posIndext.y),
-            quaternion.identity, transform);
-
-        alphabet.name = "Alphabet " + " ( " + posIndext.x + " , " + posIndext.y + " ) ";
-        alphabet.name = $"Alphabet ({posIndext.x},{posIndext.y})";
-        alphabet.SetUpAlphabet(posIndext, this);
-
-        currentAlphabets.Add(alphabet.name, new DicItem(alphabet, posIndext));
+        Alphabet alphabet;
+        alphabet = Instantiate(alphabetToSpawn, new Vector3(posIndex.x, posIndex.y + height, 0f),
+            Quaternion.identity);
+        alphabet.transform.parent = this.transform;
+        alphabet.name = "Alphabet " + " ( " + posIndex.x + " , " + posIndex.y + " ) ";
+        alphabet.SetUpAlphabet(posIndex, this);
+        alphabetsGrid[posIndex.x, posIndex.y] = alphabet;
     }
 
-    public void AddNewAlphabet(Vector2 pos)
+    public void DecreaseRowCoRutin()
     {
-        var curDic = currentAlphabets.SingleOrDefault(x => x.Value.pos == pos);
-        var toReplace =
-            currentAlphabets.SingleOrDefault(x =>
-                x.Value.pos.x == curDic.Value.pos.x && x.Value.pos.y + offset == curDic.Value.pos.y);
+        StartCoroutine(DecreaseRowCo());
+    }
 
-        if (toReplace.Key != null)
+    public void DestroyAlphabetOfWordAt(Vector2Int pos)
+    {
+        if (alphabetsGrid[pos.x, pos.y] != null)
         {
-            toReplace.Value.alphabet.transform.DOMove(curDic.Value.pos, moveDuration).OnComplete(
-                () => { curDic.Value.alphabet = toReplace.Value.alphabet; }
-            );
+            Destroy(alphabetsGrid[pos.x, pos.y].gameObject);
+            alphabetsGrid[pos.x, pos.y] = null;
+            /*if (alphabetsGrid[pos.x, pos.y].isPartOfWord)
+            {
+            }*/
+        }
+    }
+
+
+    private IEnumerator DecreaseRowCo()
+    {
+        currentState = BoardState.wait;
+        yield return new WaitForSeconds(.2f);
+
+        int nullCounter = 0;
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (alphabetsGrid[x, y] == null)
+                {
+                    nullCounter++;
+                }
+                else if (nullCounter > 0)
+                {
+                    alphabetsGrid[x, y].pos.y -= nullCounter;
+
+                    alphabetsGrid[x, y - nullCounter] = alphabetsGrid[x, y];
+                    alphabetsGrid[x, y] = null;
+                }
+            }
+
+            nullCounter = 0;
+        }
+
+        StartCoroutine(RefillingCo());
+    }
+
+    private IEnumerator RefillingCo()
+    {
+        currentState = BoardState.wait;
+        yield return new WaitForSeconds(.5f);
+        RefillingBoared();
+        currentState = BoardState.move;
+    }
+
+
+    private void RefillingBoared()
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                var chance = Random.Range(0, 100);
+                if (alphabetsGrid[x, y] == null)
+                {
+                    int alphabetToUsse = Random.Range(0, alphabetsPrefabs.Length);
+
+                    spawnAlphabet(new Vector2Int(x, y), alphabetsPrefabs[alphabetToUsse]);
+                    if (chance < alphabetsPrefabs[alphabetToUse].Chance)
+                    {
+                        /*y++;*/
+                    }
+                }
+            }
+        }
+    }
+
+
+    
+
+    public void Shuffle()
+    {
+        if (currentState != BoardState.wait)
+        {
+            currentState = BoardState.wait;
+
+            List<Alphabet> alphabetFormBoard = new List<Alphabet>();
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    alphabetFormBoard.Add(alphabetsGrid[x, y]);
+                    alphabetsGrid[x, y] = null;
+                }
+            }
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    int alphabetToUse = Random.Range(0, alphabetFormBoard.Count);
+
+                    alphabetFormBoard[alphabetToUse].SetUpAlphabet(new Vector2Int(x, y), this);
+                    alphabetsGrid[x, y] = alphabetFormBoard[alphabetToUse];
+                    alphabetFormBoard.RemoveAt(alphabetToUse);
+                }
+            }
+
+
+            currentState = BoardState.move;
         }
     }
 }

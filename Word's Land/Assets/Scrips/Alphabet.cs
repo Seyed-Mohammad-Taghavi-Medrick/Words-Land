@@ -6,16 +6,20 @@ using UnityEngine.Serialization;
 
 public class Alphabet : MonoBehaviour
 {
-    private WordChecker WordChecker;
+    private Color firstColor;
+    public int pointOfLetter;
+    private WordChecker wordChecker;
     [SerializeField] private string letter;
-    [SerializeField, Range(0,100)] private float _chance = 100f;
+    [SerializeField, Range(0, 100)] private float _chance = 100f;
+    [SerializeField] private float lerpSpeed = 2f;
+    public bool isPartOfWord;
 
     public float Chance
     {
         get => _chance;
     }
-    
-    public Vector2 pos;
+
+    public Vector2Int pos;
 
     private BlocksMaker blocksMaker;
 //*********************
@@ -41,10 +45,17 @@ public class Alphabet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        firstColor = GetComponent<SpriteRenderer>().color;
+        isPartOfWord = false;
         _selected = false;
         _clicked = false;
         _corect = false;
-        WordChecker = FindObjectOfType<WordChecker>();
+        wordChecker = FindObjectOfType<WordChecker>();
+    }
+
+    private void Update()
+    {
+        transform.position = Vector3.Lerp(transform.position, new Vector3(pos.x, pos.y, 0), Time.deltaTime * lerpSpeed);
     }
 
     private void OnEnable()
@@ -78,22 +89,30 @@ public class Alphabet : MonoBehaviour
 
     private void OnMouseDown()
     {
-        GameEventsOnEnableSqaureSelection();
-        GameEvents.EnableSqaureSelectionMethod();
-        CheckSqaure();
-        gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+        if (blocksMaker.currentState == BlocksMaker.BoardState.move)
+        {
+            GameEventsOnEnableSqaureSelection();
+            GameEvents.EnableSqaureSelectionMethod();
+            CheckSqaure();
+            gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+        }
     }
 
     private void OnMouseEnter()
     {
-        CheckSqaure();
+        if (blocksMaker.currentState == BlocksMaker.BoardState.move)
+        {
+            CheckSqaure();
+            wordChecker.wordText.text = wordChecker._word;
+            
+        }
     }
 
     private void OnMouseUp()
     {
         GameEvents.ClearSelectionMethod();
         GameEvents.DisableSqaureSelectionMethod();
-        WordChecker.CheckWord();
+        wordChecker.CheckWord();
     }
 
     public void CheckSqaure()
@@ -126,7 +145,7 @@ public class Alphabet : MonoBehaviour
         }
         else
         {
-            gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+            gameObject.GetComponent<SpriteRenderer>().color = firstColor;
             if (_selected == true)
             {
             }
@@ -135,7 +154,7 @@ public class Alphabet : MonoBehaviour
 
 
 //******************************************************************************************************************
-    public void SetUpAlphabet(Vector2 posIndex, BlocksMaker theBlocksMaker)
+    public void SetUpAlphabet(Vector2Int posIndex, BlocksMaker theBlocksMaker)
     {
         this.pos = posIndex;
         blocksMaker = theBlocksMaker;
@@ -145,7 +164,9 @@ public class Alphabet : MonoBehaviour
     {
         // sfx
         // rotation
-        blocksMaker.AddNewAlphabet(pos);
+        /*blocksMaker.AddNewAlphabet(pos);*/
+
         Destroy(gameObject);
+        blocksMaker.DecreaseRowCoRutin();
     }
 }

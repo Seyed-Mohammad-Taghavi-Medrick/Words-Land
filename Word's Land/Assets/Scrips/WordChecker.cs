@@ -5,16 +5,28 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using System.IO;
+using TMPro;
 using UnityEngine.UI;
 
 public class WordChecker : MonoBehaviour
 {
+    public TMP_Text ScoreText;
+    public TMP_Text wordText;
+    private  int score;
+    public int sumOfPointOfLetters = 0;
+    public int numOfTiles = 0;
     [SerializeField] private TextAsset database;
-
+    private BlocksMaker _blocksMaker;
     private List<Alphabet> selectedWords = new List<Alphabet>();
 
-    private string _word;
+    public string _word;
     // Start is called before the first frame update
+
+
+    void Start()
+    {
+        _blocksMaker = FindObjectOfType<BlocksMaker>();
+    }
 
     private void OnEnable()
     {
@@ -28,38 +40,76 @@ public class WordChecker : MonoBehaviour
 
     private void SqaureSelected(Alphabet obj, string letter, Vector3 position, int index)
     {
+        numOfTiles++;
+        sumOfPointOfLetters += obj.pointOfLetter;
         GameEvents.SelectSqaureMethod(position);
         _word += letter;
         selectedWords.Add(obj);
+        Debug.Log("corent number of selected Tiles is " + numOfTiles);
+        Debug.Log("corent Point is " + sumOfPointOfLetters);
     }
 
     public void CheckWord()
     {
-        var words = database.text.Split().ToList();
+        var words = database.text.Split();
         var wordToFind = _word.ToLower();
 
-        foreach (var serchingWord in words)
+        var wordIndex = binarySearch(words, _word.ToLower());
+
+        // if (wordIndex != -1)
+        //  {
+        DestroyCurrentWords();
+        Debug.Log(_word);
+
+        CalculateScore();
+
+        // }
+
+        numOfTiles = 0;
+        sumOfPointOfLetters = 0;
+        selectedWords.Clear();
+        _word = string.Empty;
+    }
+
+    static int binarySearch(String[] arr, String x)
+    {
+        int l = 0, r = arr.Length - 1;
+
+        // Loop to implement Binary Search
+        while (l <= r)
         {
-            if (_word.ToLower() == serchingWord)
-            {
-                DestroyCurrentWords();
-                Debug.Log(_word);
-                return;
-            }
+            // Calculatiing mid
+            int m = l + (r - l) / 2;
+
+            int res = x.CompareTo(arr[m]);
+
+            // Check if x is present at mid
+            if (res == 0)
+                return m;
+
+            // If x greater, ignore left half
+            if (res > 0)
+                l = m + 1;
+
+            // If x is smaller, ignore right half
+            else
+                r = m - 1;
         }
+
+        return -1;
     }
 
     private void DestroyCurrentWords()
     {
         foreach (var alphabet in selectedWords)
-            alphabet.Destory();
+        {
+            //    alphabet.isPartOfWord = true;
+            _blocksMaker.DestroyAlphabetOfWordAt(alphabet.pos);
+        }
 
-        selectedWords.Clear();
+        _blocksMaker.DecreaseRowCoRutin();
     }
 
-    void Start()
-    {
-    }
 
     // Update is called once per frame
     void Update()
@@ -89,7 +139,16 @@ public class WordChecker : MonoBehaviour
                 right = mid - 1;
         }
 
-        return -1; // لغت مورد نظر پیدا نشد
+        return -1;
+    }
+
+
+    private void CalculateScore()
+    {
+        score = (numOfTiles * sumOfPointOfLetters * 10) + score;
+        
+        ScoreText.text = $"{score}";
+        Debug.Log("score is " + score);
     }
 
 
@@ -111,6 +170,6 @@ public class WordChecker : MonoBehaviour
                 right = mid - 1;
         }
 
-        return -1; // عنصر مورد جستجو پیدا نشد
+        return -1;
     }*/
 }
