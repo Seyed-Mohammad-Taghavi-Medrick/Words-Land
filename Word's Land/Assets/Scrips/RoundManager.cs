@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using TMPro;
 public class RoundManager : MonoBehaviour
 {
+    public TMP_Text shuffleCountTex;
+    public int shuffleCount = 3;
     public float roundTime = 60f;
     private UIManager uiMan;
 
@@ -16,6 +18,7 @@ public class RoundManager : MonoBehaviour
     public float displayScore;
     public float scoreSpeed;
 
+    public bool isPaused;
     public int scoreTarget1, scoreTarget2, scoreTarget3;
 
     // Start is called before the first frame update
@@ -28,18 +31,23 @@ public class RoundManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(roundTime > 0)
+        shuffleCountTex.text =  shuffleCount.ToString();
+
+        if (!isPaused)
         {
-            roundTime -= Time.deltaTime;
-
-            if(roundTime <= 0)
+            if (roundTime > 0)
             {
-                roundTime = 0;
+                roundTime -= Time.deltaTime;
 
-                endingRound = true;
+                if (roundTime <= 0)
+                {
+                    roundTime = 0;
+
+                    endingRound = true;
+                }
             }
         }
-
+//[
         /*if(endingRound && board.currentState == Board.BoardState.move)
         {
             WinCheck();
@@ -63,24 +71,24 @@ public class RoundManager : MonoBehaviour
             uiMan.winText.text = "Congratulations! You earned 3 stars!";
             uiMan.winStars3.SetActive(true);
 
-            PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star1", 1);
-            PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star2", 1);
-            PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star3", 1);
+            UnityEngine.PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star1", 1);
+            UnityEngine.PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star2", 1);
+            UnityEngine.PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star3", 1);
 
         } else if (currentScore >= scoreTarget2)
         {
             uiMan.winText.text = "Congratulations! You earned 2 stars!";
             uiMan.winStars2.SetActive(true);
 
-            PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star1", 1);
-            PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star2", 1);
+            UnityEngine.PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star1", 1);
+            UnityEngine.PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star2", 1);
 
         } else if (currentScore >= scoreTarget1)
         {
             uiMan.winText.text = "Congratulations! You earned 1 star!";
             uiMan.winStars1.SetActive(true);
 
-            PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star1", 1);
+            UnityEngine.PlayerPrefs.SetInt(SceneManager.GetActiveScene().name + "_Star1", 1);
 
         } else
         {
@@ -93,6 +101,11 @@ public class RoundManager : MonoBehaviour
 
     public void Pause()
     {
-      //  Time.timeScale = 0;
-    } 
+        isPaused = true;
+    }
+
+    public void UnPause()
+    {
+        isPaused = false;
+    }
 }

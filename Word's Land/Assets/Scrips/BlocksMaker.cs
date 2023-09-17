@@ -10,14 +10,19 @@ using Random = UnityEngine.Random;
 
 public class BlocksMaker : MonoBehaviour
 {
+    [SerializeField] private Alphabet[] ALPHA;
+    [SerializeField] private Alphabet A;
+    [SerializeField] private Alphabet L;
+    [SerializeField] private Alphabet P;
+    [SerializeField] private Alphabet H;
     [SerializeField] float offset;
     [SerializeField] int width;
     [SerializeField] int height;
 
-    private int alphabetToUse;
     [SerializeField] private Alphabet[] alphabetsPrefabs;
 
     [SerializeField] private Alphabet[,] alphabetsGrid;
+    private RoundManager _roundManager;
 
     public enum BoardState
     {
@@ -30,6 +35,7 @@ public class BlocksMaker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _roundManager = FindObjectOfType<RoundManager>();
         DecreaseRowCoRutin();
         alphabetsGrid = new Alphabet[width, height];
         SetupBlocks();
@@ -37,10 +43,6 @@ public class BlocksMaker : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Shuffle();
-        }
     }
 
     // Update is called once per frame
@@ -52,7 +54,7 @@ public class BlocksMaker : MonoBehaviour
             {
                 var chance = Random.Range(0, 100);
                 Vector2 pos = new Vector2(x /*+ offset * x*/, y /*+ offset * y*/);
-                alphabetToUse = Random.Range(0, alphabetsPrefabs.Length);
+                var alphabetToUse = Random.Range(0, alphabetsPrefabs.Length);
                 if (chance < alphabetsPrefabs[alphabetToUse].Chance)
                 {
                     Debug.Log(chance);
@@ -61,6 +63,20 @@ public class BlocksMaker : MonoBehaviour
                     y++;
                 }
             }
+        }
+
+        for (int x = 0; x < 5; x++)
+        {
+            int y = 2;
+
+            if (alphabetsGrid[x, y] != null)
+            {
+                Destroy(alphabetsGrid[x, y].gameObject);
+                alphabetsGrid[x, y] = null;
+            }
+
+            int ALPHAIndex = x;
+            spawnAlphabet(new Vector2Int(x, y), ALPHA[ALPHAIndex]);
         }
     }
 
@@ -133,6 +149,8 @@ public class BlocksMaker : MonoBehaviour
 
     private void RefillingBoared()
     {
+        Debug.Log("log");
+
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -143,9 +161,8 @@ public class BlocksMaker : MonoBehaviour
                     int alphabetToUsse = Random.Range(0, alphabetsPrefabs.Length);
 
                     spawnAlphabet(new Vector2Int(x, y), alphabetsPrefabs[alphabetToUsse]);
-                    if (chance < alphabetsPrefabs[alphabetToUse].Chance)
+                    if (chance > alphabetsPrefabs[alphabetToUsse].Chance)
                     {
-                        /*y++;*/
                     }
                 }
             }
@@ -153,11 +170,9 @@ public class BlocksMaker : MonoBehaviour
     }
 
 
-    
-
     public void Shuffle()
     {
-        if (currentState != BoardState.wait)
+        if (currentState != BoardState.wait && _roundManager.shuffleCount > 0)
         {
             currentState = BoardState.wait;
 
@@ -186,6 +201,11 @@ public class BlocksMaker : MonoBehaviour
 
 
             currentState = BoardState.move;
+        }
+
+        if (_roundManager.shuffleCount > 0)
+        {
+            _roundManager.shuffleCount -= 1;
         }
     }
 }

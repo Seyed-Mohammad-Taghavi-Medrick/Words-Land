@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5958591020016175504}
   - component: {fileID: 2749802018634047512}
   - component: {fileID: 3524279046921287578}
+  - component: {fileID: 1769859291663375198}
   m_Layer: 0
   m_Name: empty
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 507361579298979655}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6.108, y: 2.087, z: 0}
-  m_LocalScale: {x: -0.11, y: -0.37896731, z: -0.11}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 03d994a2e31c73a4081dca18cc347ffb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f32600c236fd8bd44a9f0a1bc1fb00cc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,9 +98,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed27bcbcf15f8244bac71d440f431ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inGoldenBlock: 0
   pointOfLetter: 0
   letter: 
-  _chance: 55.4
-  lerpSpeed: 7.5
+  _chance: 1
+  lerpSpeed: 4
   isPartOfWord: 0
   pos: {x: 0, y: 0}
+--- !u!58 &1769859291663375198
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507361579298979655}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.86

@@ -105,7 +105,6 @@ public class Alphabet : MonoBehaviour
         {
             CheckSqaure();
             wordChecker.wordText.text = wordChecker._word;
-            
         }
     }
 

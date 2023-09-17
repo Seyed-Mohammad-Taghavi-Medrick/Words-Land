@@ -42,4 +42,31 @@ public static class GameEvents
     {
         OnClearSelection?.Invoke();
     }
+    
+    
+    //**************************************************************
+    
+    public static event Action OnLose;
+
+    public static void LoseMethod()
+    {
+        OnLose?.Invoke();
+    }
+    
+    
+    //**************************************************************
+    
+    public static event Action OnWin;
+
+    public static void WinMethod()
+    {
+        OnWin?.Invoke();
+    }
+
+    
+    
+    
+    
+    
+    
 }
