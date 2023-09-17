@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 
 public class Alphabet : MonoBehaviour
 {
+    public bool inGoldenBlock;
     private Color firstColor;
     public int pointOfLetter;
     private WordChecker wordChecker;
@@ -83,7 +84,7 @@ public class Alphabet : MonoBehaviour
     private void GameEventsOnSelectSqaure(Vector3 position)
     {
         if (this.transform.position == position)
-            gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+            gameObject.GetComponent<SpriteRenderer>().color = Color.green;
     }
 
 
@@ -94,7 +95,7 @@ public class Alphabet : MonoBehaviour
             GameEventsOnEnableSqaureSelection();
             GameEvents.EnableSqaureSelectionMethod();
             CheckSqaure();
-            gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+            gameObject.GetComponent<SpriteRenderer>().color = Color.green;
         }
     }
 

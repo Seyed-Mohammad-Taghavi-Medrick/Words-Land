@@ -149,6 +149,7 @@ public class WordChecker : MonoBehaviour
         
         ScoreText.text = $"{score}";
         Debug.Log("score is " + score);
+        
     }
 
 

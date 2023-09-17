@@ -89,4 +89,10 @@ public class RoundManager : MonoBehaviour
 
        // SFXManager.instance.PlayRoundOver();
     }
+
+
+    public void Pause()
+    {
+      //  Time.timeScale = 0;
+    } 
 }

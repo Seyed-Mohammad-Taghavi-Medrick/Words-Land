@@ -123,6 +123,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &39919697
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 39919699}
+  - component: {fileID: 39919698}
+  m_Layer: 0
+  m_Name: SFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &39919698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39919697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8dbeda075d5ad7489fa7c371bf9e8b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gemSound: {fileID: 0}
+  explodeSound: {fileID: 0}
+  stoneSound: {fileID: 0}
+  roundOverSound: {fileID: 0}
+--- !u!4 &39919699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39919697}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 810.62915, y: 88.26213, z: 2.4025202}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &82602071
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,7 +379,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 217503800}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1555159125}
+        m_TargetAssemblyTypeName: Setting, Assembly-CSharp
+        m_MethodName: SetUpSetting
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &217503799
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2382,6 +2442,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1555159124}
+  - component: {fileID: 1555159125}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -2411,6 +2472,19 @@ RectTransform:
   m_AnchoredPosition: {x: -1090, y: 0}
   m_SizeDelta: {x: 1080, y: 1920}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1555159125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1555159123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c353ed395d48c84ca9a40b9ae10c276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCanvasPos: {fileID: 627903660}
 --- !u!1 &1648165568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2512,7 +2586,7 @@ MonoBehaviour:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -2577,9 +2651,9 @@ MonoBehaviour:
   currentScore: 0
   displayScore: 0
   scoreSpeed: 0
-  scoreTarget1: 0
-  scoreTarget2: 0
-  scoreTarget3: 0
+  scoreTarget1: 2100
+  scoreTarget2: 3200
+  scoreTarget3: 4300
 --- !u!4 &1845360804
 Transform:
   m_ObjectHideFlags: 0
@@ -2680,6 +2754,7 @@ MonoBehaviour:
   - {fileID: 674238281001577038, guid: 0daeb4083ce73574ab27d19acc52e554, type: 3}
   - {fileID: 6068808883936265833, guid: 468688cd98d54134e88d6f88af88c43b, type: 3}
   - {fileID: 7524279377277825166, guid: 27dbfac323646044d9843bbd3fd4ef1f, type: 3}
+  - {fileID: 3524279046921287578, guid: dfcadc27ce3b29f44a442288a140eeab, type: 3}
   currentState: 0
 --- !u!4 &2012955095
 Transform:
