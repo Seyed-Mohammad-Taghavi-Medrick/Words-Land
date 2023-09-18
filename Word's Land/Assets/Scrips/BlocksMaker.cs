@@ -10,6 +10,7 @@ using Random = UnityEngine.Random;
 
 public class BlocksMaker : MonoBehaviour
 {
+    private WordChecker _wordChecker;
     [SerializeField] private Alphabet[] ALPHA;
     [SerializeField] private Alphabet A;
     [SerializeField] private Alphabet L;
@@ -35,6 +36,7 @@ public class BlocksMaker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _wordChecker = FindObjectOfType<WordChecker>();
         _roundManager = FindObjectOfType<RoundManager>();
         DecreaseRowCoRutin();
         alphabetsGrid = new Alphabet[width, height];
@@ -172,7 +174,7 @@ public class BlocksMaker : MonoBehaviour
 
     public void Shuffle()
     {
-        if (currentState != BoardState.wait && _roundManager.shuffleCount > 0)
+        if (currentState != BoardState.wait && _roundManager.shuffleCount > 0 && _wordChecker.score >=300)
         {
             currentState = BoardState.wait;
 
@@ -203,9 +205,14 @@ public class BlocksMaker : MonoBehaviour
             currentState = BoardState.move;
         }
 
-        if (_roundManager.shuffleCount > 0)
+     
+
+        if (_wordChecker.score >=300 && _roundManager.shuffleCount > 0)
         {
             _roundManager.shuffleCount -= 1;
+            _wordChecker.score -= 300;
+            int score = _wordChecker.score;
+            _wordChecker.ScoreText.text = $"{score}";
         }
     }
 }

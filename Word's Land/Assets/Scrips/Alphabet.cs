@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 
 public class Alphabet : MonoBehaviour
 {
+    public GameObject BurstSFX;
     public bool inGoldenBlock;
     private Color firstColor;
     public int pointOfLetter;
@@ -61,10 +62,16 @@ public class Alphabet : MonoBehaviour
 
     private void OnEnable()
     {
+        GameEvents.OnClearSelection += GameEventsOnOnClearSelection;
         GameEvents.OnEnableSqaureSelection += GameEventsOnEnableSqaureSelection;
         GameEvents.OnDisableSqaureSelection += GameEventsOnDisableSqaureSelection;
         GameEvents.OnSelectSqaure += GameEventsOnSelectSqaure;
         GameEvents.OnCheckSqaure += GameEventsOnOnCheckSqaure;
+    }
+
+    private void GameEventsOnOnClearSelection()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = firstColor;
     }
 
     private void GameEventsOnOnCheckSqaure(Alphabet obj, string arg1, Vector3 arg2, int arg3)
@@ -75,6 +82,7 @@ public class Alphabet : MonoBehaviour
 
     private void OnDisable()
     {
+        GameEvents.OnClearSelection -= GameEventsOnOnClearSelection;
         GameEvents.OnEnableSqaureSelection -= GameEventsOnEnableSqaureSelection;
         GameEvents.OnDisableSqaureSelection -= GameEventsOnDisableSqaureSelection;
         GameEvents.OnSelectSqaure -= GameEventsOnSelectSqaure;
@@ -113,6 +121,7 @@ public class Alphabet : MonoBehaviour
         GameEvents.ClearSelectionMethod();
         GameEvents.DisableSqaureSelectionMethod();
         wordChecker.CheckWord();
+        
     }
 
     public void CheckSqaure()
@@ -134,7 +143,7 @@ public class Alphabet : MonoBehaviour
         _selected = false;
     }
 
-    private void GameEventsOnDisableSqaureSelection()
+    public void GameEventsOnDisableSqaureSelection()
     {
         _clicked = false;
         _selected = false;

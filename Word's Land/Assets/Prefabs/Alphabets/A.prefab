@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed27bcbcf15f8244bac71d440f431ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BurstSFX: {fileID: 7603099504519377204, guid: c91606e8bc9ac954a9718d2dabccb251, type: 3}
   inGoldenBlock: 0
   pointOfLetter: 1
   letter: A

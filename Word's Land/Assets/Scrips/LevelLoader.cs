@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -21,6 +22,14 @@ public class LevelLoader : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (_roundManager.isLose || _roundManager.isWin)
+        {
+            LoadMainMenu();
+        }
+    }
+
     IEnumerator WaitForTime()
     {
         yield return new WaitForSeconds(timeToWait);
@@ -35,7 +44,7 @@ public class LevelLoader : MonoBehaviour
 
     public void LoadMainMenu()
     {
-        Time.timeScale = 1;
+       // Time.timeScale = 1;
         SceneManager.LoadScene("Main Menu");
     }
 

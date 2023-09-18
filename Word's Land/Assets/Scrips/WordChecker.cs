@@ -5,6 +5,7 @@ using TMPro;
 
 public class WordChecker : MonoBehaviour
 {
+    public int currentScore;
     [SerializeField] private TMP_Text AlowMovesCountText;
     public int AlowMovesCount = 8;
     [SerializeField] private TMP_Text currentScoreText;
@@ -12,7 +13,7 @@ public class WordChecker : MonoBehaviour
     private RoundManager _roundManager;
     public TMP_Text ScoreText;
     public TMP_Text wordText;
-    private int score;
+    public int score;
     public int sumOfPointOfLetters = 0;
     public int numOfTiles = 0;
     [SerializeField] private TextAsset database;
@@ -90,6 +91,7 @@ public class WordChecker : MonoBehaviour
     {
         foreach (var alphabet in selectedWords)
         {
+            Instantiate(alphabet.BurstSFX, alphabet.transform.position, alphabet.transform.rotation);
             //    alphabet.isPartOfWord = true;
             _blocksMaker.DestroyAlphabetOfWordAt(alphabet.pos);
         }
@@ -99,7 +101,7 @@ public class WordChecker : MonoBehaviour
 
     private void CalculateScore()
     {
-        var currentScore = numOfTiles * sumOfPointOfLetters * 10;
+        currentScore = numOfTiles * sumOfPointOfLetters * 10;
 
         foreach (var alphabet in selectedWords)
         {

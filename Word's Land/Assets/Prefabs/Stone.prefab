@@ -98,11 +98,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed27bcbcf15f8244bac71d440f431ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BurstSFX: {fileID: 0}
   inGoldenBlock: 0
   pointOfLetter: 0
   letter: 
-  _chance: 1
-  lerpSpeed: 2
+  _chance: 20
+  lerpSpeed: 7.5
   isPartOfWord: 0
   pos: {x: 0, y: 0}
 --- !u!58 &-3349950644993780788

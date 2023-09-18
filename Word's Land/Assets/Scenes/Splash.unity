@@ -735,6 +735,14 @@ PrefabInstance:
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7178169101914195321, guid: 50bf38c2fb0bc1b48a1c2a2584ef9f9f, type: 3}
+      propertyPath: WinSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 570c64281fcb4e94aa4d75b6891c1037, type: 3}
+    - target: {fileID: 7178169101914195321, guid: 50bf38c2fb0bc1b48a1c2a2584ef9f9f, type: 3}
+      propertyPath: LoseSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 65e94326bb102cf49be9b0e98d35471d, type: 3}
     - target: {fileID: 7178169101914195322, guid: 50bf38c2fb0bc1b48a1c2a2584ef9f9f, type: 3}
       propertyPath: m_RootOrder
       value: 4
